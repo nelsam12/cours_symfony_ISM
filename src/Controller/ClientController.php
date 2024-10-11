@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,10 +11,21 @@ use Symfony\Component\Routing\Attribute\Route;
 class ClientController extends AbstractController
 {
     #[Route('/clients', name: 'clients.index', methods: ['GET'])]
-    public function index(): Response
+    public function index(ClientRepository $clientRepository): Response
     {
+        /* 
+            Methodes de répository permet de récupérer les données d'une entité :
+                findAll() : Retourne tous les objets de la classe
+                find($id) : Retourne un objet unique grâce à son id
+                findBy(['field' => 'value']) : Retourne une liste d'objets en fonction d'un ou plusieurs champs
+                findBy(['field1' => 'value1', 'field2' => 'value2']) : Retourne une liste d'objets en fonction de plusieurs champs
+                findOneBy(['field' => 'value']) : Retourne un objet unique en fonction d'un ou plusieurs champs
+                findOneBy(['field1' => 'value1', 'field2' => 'value2']) : Retourne un objet unique en fonction de plusieurs champs
+                findOneBy(['field' => 'value'], ['order_field' => 'ASC']) : Retourne un objet unique en fonction d'un ou plusieurs champs et tri
+        */
+        $clients = $clientRepository->findAll();
         return $this->render('client/index.html.twig', [
-            'controller_name' => 'ClientController',
+            'datas' => $clients
         ]);
     }
 

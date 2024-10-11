@@ -31,21 +31,31 @@
 							</tr>
 						</thead>
 						<tbody>
+                        {% for client in datas %}
 							<tr class="">
 								<td scope="row">
                                 
                                     <img src="{{asset('images/avatar.jpg')}}" alt="avatar.jpg" class="image-size">
+                                    
                                 </td>
-								<td>R1C2</td>
-								<td>R1C2</td>
-								<td>R1C2</td>
-								<td>R1C2</td>
+								<td>
+                                     {{ client.user.nom }}
+                                </td>
+								<td>
+                                     {{ client.user.prenom }}
+                                </td>
+								<td>
+                                      {{ client.surname }}
+                                </td>
+								<td>
+                                     {{ client.telephone }}
+                                </td>
 								<td>
 									<a name="" id="" class="btn btn-outline-dark" href="#" role="button">Detail</a>
 									<a name="" id="" class="btn btn-outline-danger" href="#" role="button">Delete</a>
 								</td>
 							</tr>
-
+                        {% endfor %}
 						</tbody>
 					</table>
 					<nav aria-label="Page navigation" class="d-flex justify-content-end">

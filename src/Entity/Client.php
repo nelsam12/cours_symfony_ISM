@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
@@ -27,6 +29,20 @@ class Client
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updateAt = null;
+
+    #[ORM\OneToOne(inversedBy: 'client', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
+    /**
+     * @var Collection<int, Dette>
+     */
+    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true)]
+    private Collection $dettes;
+
+    public function __construct()
+    {
+        $this->dettes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +105,48 @@ class Client
     public function setUpdateAt(\DateTimeImmutable $updateAt): static
     {
         $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dette>
+     */
+    public function getDettes(): Collection
+    {
+        return $this->dettes;
+    }
+
+    public function addDette(Dette $dette): static
+    {
+        if (!$this->dettes->contains($dette)) {
+            $this->dettes->add($dette);
+            $dette->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDette(Dette $dette): static
+    {
+        if ($this->dettes->removeElement($dette)) {
+            // set the owning side to null (unless already changed)
+            if ($dette->getClient() === $this) {
+                $dette->setClient(null);
+            }
+        }
 
         return $this;
     }

@@ -7,9 +7,9 @@
 			<div class="card-header">Liste des clients</div>
 			<div class="card-body">
 				<div class="d-flex justify-content-end">
-					<a name="" id="" class="btn btn-outline-dark mb-2" href="#" role="button">Create</a>
+					<a name="" id="" class="btn btn-outline-dark mb-2" href="{{path('clients.store')}}" role="button">Create</a>
 				</div>
-                
+
 				<form class="d-flex my-2 my-lg-0 col-5">
 					<input class="form-control me-sm-2" type="text" placeholder="Téléphone"/>
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
@@ -31,31 +31,38 @@
 							</tr>
 						</thead>
 						<tbody>
-                        {% for client in datas %}
-							<tr class="">
-								<td scope="row">
-                                
-                                    <img src="{{asset('images/avatar.jpg')}}" alt="avatar.jpg" class="image-size">
+							{% for client in datas %}
+								<tr class="">
+									<td scope="row">
+
+										<img src="{{asset('images/avatar.jpg')}}" alt="avatar.jpg" class="image-size">
+
+									</td>
+									<td>
+										{% if client.user %}
+											{{ client.user.nom }}
+										{% endif %}
+
+									</td>
+									<td>
+										{% if client.user %}
+											{{ client.user.prenom }}
+										{% endif %}
+
+									</td>
+									<td>
+										{{ client.surname }}
+									</td>
+									<td>
                                     
-                                </td>
-								<td>
-                                     {{ client.user.nom }}
-                                </td>
-								<td>
-                                     {{ client.user.prenom }}
-                                </td>
-								<td>
-                                      {{ client.surname }}
-                                </td>
-								<td>
-                                     {{ client.telephone }}
-                                </td>
-								<td>
-									<a name="" id="" class="btn btn-outline-dark" href="#" role="button">Detail</a>
-									<a name="" id="" class="btn btn-outline-danger" href="#" role="button">Delete</a>
-								</td>
-							</tr>
-                        {% endfor %}
+										{{ client.telephone }}
+									</td>
+									<td>
+										<a name="" id="" class="btn btn-outline-dark" href="#" role="button">Dettes</a>
+										<a name="" id="" class="btn btn-outline-danger" href="#" role="button">Delete</a>
+									</td>
+								</tr>
+							{% endfor %}
 						</tbody>
 					</table>
 					<nav aria-label="Page navigation" class="d-flex justify-content-end">

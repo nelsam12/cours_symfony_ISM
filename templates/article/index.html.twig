@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+   .<div
+    class="container"
+   >
+     <div class="card">
+        <div class="card-header">Liste des Articles</div>
+        <div class="card-body">
+          <div class="d-flex justify-content-end">
+           <a
+            name=""
+            id=""
+            class="btn btn-outline-dark mb-2"
+            href="#"
+            role="button"
+            >Create</a
+           >
+          </div>
+           
+           <div
+            class="table-responsive"
+           >
+            <table
+                class="table table-light table-bordered table-striped"
+            >
+                <thead>
+                    <tr>
+                        <th class="">#</th>
+                        <th class="">Reference</th>
+                        <th class="">Libelle</th>
+                        <th class="">Qte Stock</th>
+                        <th class="">Prix</th>
+                        <th class="">Actions</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="">
+                        <td scope="row">R1C1</td>
+                        <td>R1C2</td>
+                        <td>R1C2</td>
+                        <td>R1C2</td>
+                        <td>R1C2</td>
+                        <td>
+                        <a
+                            name=""
+                            id=""
+                            class="btn btn-outline-dark"
+                            href="#"
+                            role="button"
+                            >Detail</a
+                        >
+                        <a
+                            name=""
+                            id=""
+                            class="btn btn-outline-danger"
+                            href="#"
+                            role="button"
+                            >Delete</a
+                        >
+                        </td>
+                    </tr>
+                  
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation" class="d-flex justify-content-end">
+                <ul
+                    class="pagination    "
+                >
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+           </div>
+           
+        </div>
+    </div>
+   </div>
+   
+    
+   
+   
+{% endblock %}
+

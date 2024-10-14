@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
 {
@@ -19,6 +21,10 @@ class Client
     private ?string $telephone = null;
 
     #[ORM\Column(length: 50)]
+    // Validation sur l'entité
+    #[Assert\NotBlank(
+        message: 'Veuillez renseigner un surname valide.',
+    )]
     private ?string $surname = null;
 
     #[ORM\Column(length: 100)]

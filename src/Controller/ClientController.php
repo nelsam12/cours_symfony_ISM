@@ -76,7 +76,7 @@ class ClientController extends AbstractController
         // Récupération des données du formulaire
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted() && $form->isValid()) {
             // Sauvegarde des données du formulaire dans la base de données
             $client->setCreateAt(new \DateTimeImmutable());
             $client->setUpdateAt(new \DateTimeImmutable());

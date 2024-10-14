@@ -6,10 +6,15 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
+// Validation du formulaire pour l'unicité 
+#[UniqueEntity('telephone', message:'Le téléphone doit être unique')]
+#[UniqueEntity('surname', message:'Le surname doit être unique')]
+
 class Client
 {
     #[ORM\Id]
@@ -17,10 +22,10 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 11)]
+    #[ORM\Column(length: 11, unique: true)]
     private ?string $telephone = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique: true)]
     // Validation sur l'entité
     #[Assert\NotBlank(
         message: 'Veuillez renseigner un surname valide.',

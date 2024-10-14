@@ -4,17 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Form\ClientType;
+use App\Form\SearchClientType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 class ClientController extends AbstractController
 {
-    #[Route('/clients', name: 'clients.index', methods: ['GET'])]
-    public function index(ClientRepository $clientRepository): Response
+    #[Route('/clients', name: 'clients.index', methods: ['GET', 'POST'])]
+    public function index(ClientRepository $clientRepository, Request $request): Response
     {
         /* 
             Methodes de répository permet de récupérer les données d'une entité :
@@ -26,9 +28,19 @@ class ClientController extends AbstractController
                 findOneBy(['field1' => 'value1', 'field2' => 'value2']) : Retourne un objet unique en fonction de plusieurs champs
                 findOneBy(['field' => 'value'], ['order_field' => 'ASC']) : Retourne un objet unique en fonction d'un ou plusieurs champs et tri
         */
-        $clients = $clientRepository->findAll();
+
+        $formSearch = $this->createForm(SearchClientType::class);
+        $formSearch->handleRequest($request);
+        if ($formSearch->isSubmitted($request) && $formSearch->isValid()){
+            $clients = $clientRepository->findBy(['telephone' => $formSearch->get('telephone')->getData()]);
+        }else{
+            $clients = $clientRepository->findAll();
+        }
+
+        
         return $this->render('client/index.html.twig', [
-            'datas' => $clients
+            'datas' => $clients,
+            'formSearch' => $formSearch->createView()
         ]);
     }
 

@@ -36,7 +36,7 @@ class ClientType extends AbstractType
                         'message' => 'Le téléphone ne peut pas être vide',
                     ]),
                     new Regex(
-                        '/^([77|78|76])[0-9]{7}$/',
+                        '/^(77|78|76)([0-9]{7})$/',
                         'Le numéro de téléphone doit être au format 77XXXXXX ou 78XXXXXX ou 76XXXXXX'
                     )
 

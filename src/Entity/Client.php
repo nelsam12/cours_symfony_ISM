@@ -41,6 +41,8 @@ class Client
     #[ORM\Column]
     private ?\DateTimeImmutable $updateAt = null;
 
+
+    // Cascade Persist
     #[ORM\OneToOne(inversedBy: 'client', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 

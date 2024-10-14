@@ -49,7 +49,7 @@ class Client
     /**
      * @var Collection<int, Dette>
      */
-    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client', orphanRemoval: true, cascade: ['persist'])]
     private Collection $dettes;
 
     public function __construct()
@@ -148,7 +148,7 @@ class Client
     {
         if (!$this->dettes->contains($dette)) {
             $this->dettes->add($dette);
-            $dette->setClient($this);
+            $dette->setClient($this); // Ajoute le client à la dette
         }
 
         return $this;

@@ -34,7 +34,7 @@ class ClientController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $count = 0;
         $maxPage = 0;
-        $limit = 3;
+        $limit = 6;
         if ($formSearch->isSubmitted($request) && $formSearch->isValid()) {
             $clients = $clientRepository->findBy(['telephone' => $formSearch->get('telephone')->getData()]);
         } else {
@@ -98,9 +98,9 @@ class ClientController extends AbstractController
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // Sauvegarde des données du formulaire dans la base de données
-            $client->setCreateAt(new \DateTimeImmutable());
-            $client->setUpdateAt(new \DateTimeImmutable());
-
+            // il est déjà fait dans le constructeur
+            // $client->setCreateAt(new \DateTimeImmutable());
+            // $client->setUpdateAt(new \DateTimeImmutable());
             $entityManager->persist($client);
             // Executer la requête
             $entityManager->flush(); // commit the changes

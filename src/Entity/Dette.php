@@ -29,6 +29,10 @@ class Dette
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
+    // Ne sera pas persisté
+    // private ?float $montantRestant = null;
+    
+
     public function __construct()
     {
         $this->createAt = new \DateTimeImmutable();
@@ -43,6 +47,11 @@ class Dette
     public function getMontant(): ?float
     {
         return $this->montant;
+    }
+
+    public function getMontantRestant(): ?float
+    {
+        return $this->montant - $this->montantVerser;
     }
 
     public function setMontant(float $montant): static

@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Form\ClientType;
+use App\Dto\ClientSearchDto;
 use App\Form\SearchClientType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClientController extends AbstractController
 {
@@ -29,19 +30,21 @@ class ClientController extends AbstractController
                 findOneBy(['field' => 'value'], ['order_field' => 'ASC']) : Retourne un objet unique en fonction d'un ou plusieurs champs et tri
         */
 
-        $formSearch = $this->createForm(SearchClientType::class);
+        $clientSearchDto = new ClientSearchDto(); // appel du constructeur
+        $formSearch = $this->createForm(SearchClientType::class, $clientSearchDto);
         $formSearch->handleRequest($request);
         $page = $request->query->getInt('page', 1);
         $count = 0;
         $maxPage = 0;
         $limit = 6;
         if ($formSearch->isSubmitted($request) && $formSearch->isValid()) {
-            $clients = $clientRepository->findBy(['telephone' => $formSearch->get('telephone')->getData()]);
+            // $formSearch->get('telephone')->getData()
+            $clients = $clientRepository->findClientBy($clientSearchDto, $page, $limit);
         } else {
             $clients = $clientRepository->paginateClients($page, $limit);
-            $count = $clients->count();
-            $maxPage = ceil($count / $limit);
         }
+        $count = $clients->count();
+        $maxPage = ceil($count / $limit);
 
 
         return $this->render('client/index.html.twig', [
@@ -54,11 +57,13 @@ class ClientController extends AbstractController
 
     // Utilisation des path variables
     // Parameter facultatif  {name_param?}
-    #[Route('/clients/show/{id?}', name: 'clients.show', methods: ['GET'])]
-    public function show(int $id): Response
+    #[Route('/clients/show/{idClient}', name: 'clients.show', methods: ['GET'])]
+    public function show(int $idClient, ClientRepository $clientRepository): Response
     {
-        return $this->render('client/index.html.twig', [
-            'controller_name' => 'ClientController',
+
+        $client = $clientRepository->find($idClient);
+        return $this->render('client/dette.html.twig', [
+           'client' => $client,
         ]);
     }
 

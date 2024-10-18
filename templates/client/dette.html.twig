@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+	.<div class="container">
+		<div class="card my-2">
+			<div class="card-body">
+				<h4 class="card-title">Informations Client</h4>
+				<div>
+					<p>
+						Surname :
+						{{client.surname}}
+					</p>
+					<p>
+						Téléphone :
+						{{client.telephone}}
+					</p>
+					{% if client.user %}
+						<p>
+							Nom :
+							{{client.compte.nom}}
+						</p>
+						<p>
+							Prénom(s) :{{client.compte.prenom}}
+						</p>
+					{% else %}
+						<p>Pas de compte
+						</p>
+					{% endif %}
+					<p></p>
+					<p>
+						Montant Total Dû :
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+
+			<div class="card-header">Liste des clients</div>
+			<div class="card-body">
+				<div class="d-flex justify-content-end">
+					<a name="" id="" class="btn btn-outline-dark mb-2" href="{{path('clients.store')}}" role="button">Create</a>
+				</div>
+
+				{# <form class="d-flex my-2 my-lg-0 col-5">
+																																																																	<input class="form-control me-sm-2" type="text" placeholder="Téléphone"/>
+																																																																	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+																																																																		Search
+																																																																	</button>
+																																																																</form> #}
+
+
+				{# {{ form_start(formSearch) }}
+                            <div class='mb-2 text-danger'>
+                                {{ form_errors(formSearch.telephone) }}
+                            </div>
+                            <div class='d-flex my-2 my-lg-0 col-5'>
+                                {{ form_widget(formSearch.telephone, { 'attr' : {
+                                        'class' : 'form-control me-sm-2'
+                                    }}) }}
+                                {{ form_widget(formSearch.surname, { 'attr' : {
+                                        'class' : 'form-control me-sm-2'
+                                    }}) }}
+                                {{ form_widget(formSearch.Search) }}
+            
+                            </div>
+            
+                            {{ form_end(formSearch)}} #}
+
+				<div class="table-responsive mt-3">
+					<table class="table table-light table-bordered table-striped ">
+						<thead>
+							<tr>
+								<th class="">Date</th>
+								<th class="">Montant</th>
+								<th class="">Montant Verser</th>
+								<th class="">Montant Restant</th>
+								<th class="">Actions</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for dette in client.dettes %}
+								<tr class="">
+									
+									<td>
+										{{dette.createAt |date("d/m/Y")}}
+									</td>
+									<td>
+										{{dette.montant}}
+									</td>
+									<td>
+										{{dette.montantVerser}}
+									</td>
+									<td>
+										{{dette.getMontantRestant()}}
+									</td>
+									<td>
+										<a name="" id="" class="btn btn-outline-dark" href="#" role="button">Articles</a>
+										{# <a name="" id="" class="btn btn-outline-danger" href="#" role="button">Delete</a> #}
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{# <nav aria-label="Page navigation" class="d-flex justify-content-end">
+																																														<ul class="pagination    ">
+																																															<li class="page-item">
+																																																{% if page > 1 %}
+																																																	<a class="page-link" href="?page={{page - 1}}" aria-label="Previous">
+																																																		<span aria-hidden="true">&laquo;</span>
+																																																	</a>
+																																																{% endif %}
+																																															</li>
+																																															{% for i in 1..maxPage %}
+																																																<li class="page-item {{ i == page ? 'active' : '' }}" aria-current="page">
+																																																	<a class="page-link" href="?page={{i}}">
+																																																		{{ i }}
+																																																	</a>
+																																																</li>
+																																															{% endfor %}
+																																								
+																																															<li class="page-item">
+																																																{% if page < maxPage %}
+																																																	<a class="page-link" href="?page={{page + 1}}" aria-label="Next">
+																																																		<span aria-hidden="true">&raquo;</span>
+																																																	</a>
+																																																{% endif %}
+																																															</li>
+																																														</ul>
+																																													</nav> #}
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

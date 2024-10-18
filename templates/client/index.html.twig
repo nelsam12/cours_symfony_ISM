@@ -11,11 +11,11 @@
 				</div>
 
 				{# <form class="d-flex my-2 my-lg-0 col-5">
-																									<input class="form-control me-sm-2" type="text" placeholder="Téléphone"/>
-																									<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-																										Search
-																									</button>
-																								</form> #}
+																																					<input class="form-control me-sm-2" type="text" placeholder="Téléphone"/>
+																																					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+																																						Search
+																																					</button>
+																																				</form> #}
 
 
 				{{ form_start(formSearch) }}
@@ -26,7 +26,11 @@
 					{{ form_widget(formSearch.telephone, { 'attr' : {
 							'class' : 'form-control me-sm-2'
 						}}) }}
+					{{ form_widget(formSearch.surname, { 'attr' : {
+							'class' : 'form-control me-sm-2'
+						}}) }}
 					{{ form_widget(formSearch.Search) }}
+
 				</div>
 
 				{{ form_end(formSearch)}}
@@ -47,7 +51,7 @@
 						<tbody>
 							{% for client in datas %}
 								<tr class="">
-									<td scope="row">
+									<td>
 										<img src="{{asset('images/avatar.jpg')}}" alt="avatar.jpg" class="image-size">
 									</td>
 									<td>
@@ -70,7 +74,8 @@
 										{{ client.telephone }}
 									</td>
 									<td>
-										<a name="" id="" class="btn btn-outline-dark" href="#" role="button">Dettes</a>
+										<a name="" id="" class="btn btn-outline-dark" href="{{path('clients.show', {idClient : client.id})}}" role="button">Dettes</a>
+										
 										<a name="" id="" class="btn btn-outline-danger" href="#" role="button">Delete</a>
 									</td>
 								</tr>
@@ -79,10 +84,12 @@
 					</table>
 					<nav aria-label="Page navigation" class="d-flex justify-content-end">
 						<ul class="pagination    ">
-							<li class="page-item disabled">
-								<a class="page-link" href="#" aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-								</a>
+							<li class="page-item">
+								{% if page > 1 %}
+									<a class="page-link" href="?page={{page - 1}}" aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+									</a>
+								{% endif %}
 							</li>
 							{% for i in 1..maxPage %}
 								<li class="page-item {{ i == page ? 'active' : '' }}" aria-current="page">
@@ -93,9 +100,11 @@
 							{% endfor %}
 
 							<li class="page-item">
-								<a class="page-link" href="#" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-								</a>
+								{% if page < maxPage %}
+									<a class="page-link" href="?page={{page + 1}}" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								{% endif %}
 							</li>
 						</ul>
 					</nav>

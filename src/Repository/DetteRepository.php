@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Dette;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\enum\StatusDette;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Dette>
@@ -30,6 +32,25 @@ class DetteRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
+
+     public function findDetteByClient(int $idClient, string $status = "Impaye",  int $limit = 2, int $page = 1): Paginator
+    {
+        $query = $this->createQueryBuilder('d');
+        $query->where('d.client = :idClient');
+        $query->setParameter('idClient', $idClient);
+        if ($status == StatusDette::Impaye->value) {
+            $query->andWhere('d.montant != d.montantVerser');
+        }
+        if ($status == StatusDette::Paye->value) {
+            $query->andWhere('d.montant = d.montantVerser');
+        }
+
+        $query->orderBy('d.createAt', 'DESC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+        return new Paginator($query);
+    }
 
     //    public function findOneBySomeField($value): ?Dette
     //    {

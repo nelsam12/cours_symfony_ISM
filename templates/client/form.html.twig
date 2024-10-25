@@ -7,9 +7,11 @@
 			<div class="card-header">Enregistrement d'un client</div>
 			<div class="card-body">
 				{{ form(formClient) }}
+				</div>
 			</div>
 		</div>
-	</div>
+		{% block myScript %}
+			 <script src = "{{asset('controllers/form_client.js')}}"></script>
 
-
-{% endblock %}
+		{% endblock %}
+	{% endblock %}

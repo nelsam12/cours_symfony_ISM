@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Dto\ClientSearchDto;
+use App\enum\StatusDette;
+use App\Form\DetteFilterType;
 use App\Form\SearchClientType;
 use App\Repository\ClientRepository;
+use App\Repository\DetteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +42,7 @@ class ClientController extends AbstractController
         $limit = 6;
         if ($formSearch->isSubmitted($request) && $formSearch->isValid()) {
             // $formSearch->get('telephone')->getData()
+            
             $clients = $clientRepository->findClientBy($clientSearchDto, $page, $limit);
         } else {
             $clients = $clientRepository->paginateClients($page, $limit);
@@ -57,13 +61,31 @@ class ClientController extends AbstractController
 
     // Utilisation des path variables
     // Parameter facultatif  {name_param?}
-    #[Route('/clients/show/{idClient}', name: 'clients.show', methods: ['GET'])]
-    public function show(int $idClient, ClientRepository $clientRepository): Response
+    #[Route('/clients/show/{idClient?}', name: 'clients.show', methods: ['GET'])]
+    public function show(int $idClient, ClientRepository $clientRepository, Request $request, DetteRepository $detteRepository): Response
     {
+        $limit = 1;
+        $page = $request->query->getInt('page', 1);
 
+        $formSearch = $this->createForm(DetteFilterType::class);
+        $formSearch->handleRequest($request);
         $client = $clientRepository->find($idClient);
+        $status = $request->get("status", StatusDette::Impaye->value);
+
+        if ($request->query->has('dette_filter')) {
+            $status = $request->query->all('dette_filter')['status'];
+        }
+        $dettes = $detteRepository->findDetteByClient($idClient, $status, $limit, $page);
+
+        $count = $dettes->count();
+        $maxPage = ceil($count / $limit);
         return $this->render('client/dette.html.twig', [
-           'client' => $client,
+            'dettes' => $dettes,
+            'client' => $client,
+            'status' => $status,
+            'formSearch' => $formSearch->createView(),
+            'page' => $page, // page actuelle
+            'maxPage' => $maxPage,
         ]);
     }
 
@@ -102,6 +124,10 @@ class ClientController extends AbstractController
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('addUser')->getData()){
+                // Ajout d'un utilisateur avec le client
+                
+            }
             // Sauvegarde des données du formulaire dans la base de données
             // il est déjà fait dans le constructeur
             // $client->setCreateAt(new \DateTimeImmutable());

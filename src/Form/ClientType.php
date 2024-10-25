@@ -7,14 +7,15 @@ use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Regex;
 
 class ClientType extends AbstractType
 {
@@ -49,16 +50,23 @@ class ClientType extends AbstractType
             ->add('adresse', TextareaType::class, [
                 'required' => false,
             ])
-            // ->add('createAt', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('updateAt', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('user', EntityType::class, [
-            //     'class' => User::class,
-            //     'choice_label' => 'id',
-            // ])
+            ->add('addUser', CheckboxType::class, [
+                'label' => 'Ajouter un compte ?',
+                'required' => false,
+                'data' => false,
+                'mapped' => false,
+                
+                'attr' => [
+                    'class' => 'form-check-input',
+                ],
+            ])
+            ->add('user', UserType::class, [
+                'label' => false,
+                'attr' => [
+                    'class' => 'd-none',
+                ],
+                'validation_groups' => ['with_compte'],
+            ])
             ->add('Save', SubmitType::class)
 
         ;

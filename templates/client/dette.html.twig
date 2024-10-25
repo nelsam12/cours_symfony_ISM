@@ -6,6 +6,7 @@
 			<div class="card-body">
 				<h4 class="card-title">Informations Client</h4>
 				<div>
+				    
 					<p>
 						Surname :
 						{{client.surname}}
@@ -17,10 +18,10 @@
 					{% if client.user %}
 						<p>
 							Nom :
-							{{client.compte.nom}}
+							{{client.user.nom}}
 						</p>
 						<p>
-							Prénom(s) :{{client.compte.prenom}}
+							Prénom(s) :{{client.user.prenom}}
 						</p>
 					{% else %}
 						<p>Pas de compte
@@ -50,22 +51,18 @@
 																																																																</form> #}
 
 
-				{# {{ form_start(formSearch) }}
-                            <div class='mb-2 text-danger'>
-                                {{ form_errors(formSearch.telephone) }}
-                            </div>
-                            <div class='d-flex my-2 my-lg-0 col-5'>
-                                {{ form_widget(formSearch.telephone, { 'attr' : {
-                                        'class' : 'form-control me-sm-2'
-                                    }}) }}
-                                {{ form_widget(formSearch.surname, { 'attr' : {
-                                        'class' : 'form-control me-sm-2'
-                                    }}) }}
-                                {{ form_widget(formSearch.Search) }}
-            
-                            </div>
-            
-                            {{ form_end(formSearch)}} #}
+				{{ form_start(formSearch, {'method': 'GET'}) }}
+                    <div class='mb-2 text-danger'>
+                        {{ form_errors(formSearch.status) }}
+                    </div>
+                    <div class='d-flex my-2 my-lg-0 col-5'>
+                        {{ form_widget(formSearch.status, { 'attr' : {
+                                'class' : 'form-control me-sm-2'
+                            }}) }}
+                       
+                        {{ form_widget(formSearch.Search) }}
+                    </div>
+                {{ form_end(formSearch)}}
 
 				<div class="table-responsive mt-3">
 					<table class="table table-light table-bordered table-striped ">
@@ -75,12 +72,13 @@
 								<th class="">Montant</th>
 								<th class="">Montant Verser</th>
 								<th class="">Montant Restant</th>
+								<th class="">Status</th>
 								<th class="">Actions</th>
 
 							</tr>
 						</thead>
 						<tbody>
-							{% for dette in client.dettes %}
+							{% for dette in dettes %}
 								<tr class="">
 									
 									<td>
@@ -95,6 +93,9 @@
 									<td>
 										{{dette.getMontantRestant()}}
 									</td>
+                                    <td>
+										{{dette.status.name}}
+									</td>
 									<td>
 										<a name="" id="" class="btn btn-outline-dark" href="#" role="button">Articles</a>
 										{# <a name="" id="" class="btn btn-outline-danger" href="#" role="button">Delete</a> #}
@@ -103,33 +104,32 @@
 							{% endfor %}
 						</tbody>
 					</table>
-					{# <nav aria-label="Page navigation" class="d-flex justify-content-end">
-																																														<ul class="pagination    ">
-																																															<li class="page-item">
-																																																{% if page > 1 %}
-																																																	<a class="page-link" href="?page={{page - 1}}" aria-label="Previous">
-																																																		<span aria-hidden="true">&laquo;</span>
-																																																	</a>
-																																																{% endif %}
-																																															</li>
-																																															{% for i in 1..maxPage %}
-																																																<li class="page-item {{ i == page ? 'active' : '' }}" aria-current="page">
-																																																	<a class="page-link" href="?page={{i}}">
-																																																		{{ i }}
-																																																	</a>
-																																																</li>
-																																															{% endfor %}
-																																								
-																																															<li class="page-item">
-																																																{% if page < maxPage %}
-																																																	<a class="page-link" href="?page={{page + 1}}" aria-label="Next">
-																																																		<span aria-hidden="true">&raquo;</span>
-																																																	</a>
-																																																{% endif %}
-																																															</li>
-																																														</ul>
-																																													</nav> #}
+					<nav aria-label="Page navigation" class="d-flex justify-content-end">
+						<ul class="pagination    ">
+							<li class="page-item">
+								{% if page > 1 %}
+									<a class="page-link" href="?page={{page - 1}}&status={{status}}" aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+									</a>
+								{% endif %}
+							</li>
+							{% for i in 1..maxPage %}
+								<li class="page-item {{ i == page ? 'active' : '' }}" aria-current="page">
+									<a class="page-link" href="?page={{i}}&status={{status}}">
+										{{ i }}
+									</a>
+								</li>
+							{% endfor %}
 
+							<li class="page-item">
+								{% if page < maxPage %}
+									<a class="page-link" href="?page={{page + 1}}&status={{status}}" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								{% endif %}
+							</li>
+						</ul>
+					</nav>
 				</div>
 
 			</div>

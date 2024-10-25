@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Dto\ClientSearchDto;
 use App\Entity\Client;
+use App\enum\StatusDette;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -53,6 +54,45 @@ class ClientRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery();
         return new Paginator($query);
+    }
+
+    // public function findDetteByClient(int $idClient, StatusDette $status = StatusDette::Impaye,  int $limit = 2, int $page = 1): Paginator
+    // {
+    //     $query = $this->createQueryBuilder('c');
+    //     $query->join('c.dettes', 'd');
+    //     $query->where('c.id = :idClient');
+    //     $query->setParameter('idClient', $idClient);
+    //     if ($status == StatusDette::Impaye) {
+    //         $query->andWhere('d.montant != d.montantVerser');
+    //     }
+    //     if ($status == StatusDette::Paye) {
+    //         $query->andWhere('d.montant = d.montantVerser');
+    //     }
+
+    //     $query->orderBy('d.createAt', 'DESC')
+    //         ->setFirstResult(($page - 1) * $limit)
+    //         ->setMaxResults($limit)
+    //         ->getQuery();
+    //     return new Paginator($query);
+    // }
+
+    public function findDetteByClient(int $idClient, StatusDette $status = StatusDette::Paye)
+    {
+        $query = $this->createQueryBuilder('c');
+        $query->join('c.dettes', 'd');
+        $query->where('c.id = :idClient');
+        $query->setParameter('idClient', $idClient);
+        if ($status->value == StatusDette::Impaye->value) {
+            // dd($status->value == StatusDette::Impaye->value);
+            $query->andWhere('d.montant != d.montantVerser');
+        }
+        if ($status->value == StatusDette::Paye->value) {
+            $query->andWhere('d.montant = d.montantVerser');
+        }
+
+        return $query->orderBy('d.createAt', 'DESC')
+            ->getQuery()
+            ->getSingleResult();
     }
 
     //    public function findOneBySomeField($value): ?Client

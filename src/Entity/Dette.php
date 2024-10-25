@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\enum\StatusDette;
 use App\Repository\DetteRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,7 +18,7 @@ class Dette
     private ?float $montant = null;
 
     #[ORM\Column]
-    private ?float $montantVerser = null;
+    private ?float $montantVerser = 0;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
@@ -31,17 +32,29 @@ class Dette
 
     // Ne sera pas persisté
     // private ?float $montantRestant = null;
-    
+
+    private StatusDette $status = StatusDette::Impaye;
+
 
     public function __construct()
     {
         $this->createAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
+
+        
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getStatus(): StatusDette
+    {
+        if ($this->montantVerser != 0 && $this->montantVerser == $this->montant) {
+            $this->status = StatusDette::Paye;
+        }
+        return $this->status;
     }
 
     public function getMontant(): ?float

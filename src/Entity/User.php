@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements PasswordAuthenticatedUserInterface
@@ -14,15 +15,31 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez renseigner un surname valide.',
+        groups: ['with_compte']
+    )]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez renseigner un surname valide.',
+        groups: ['with_compte']
+    )]
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez renseigner un surname valide.',
+        groups: ['with_compte']
+    )]
     #[ORM\Column(length: 100, unique: true)]
     private ?string $login = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez renseigner un surname valide.',
+        groups: ['with_compte']
+    )]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 

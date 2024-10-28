@@ -68,19 +68,22 @@ class ClientType extends AbstractType
                     'class' => 'form-check-input',
                 ],
             ])
-            ->add('user', UserType::class, [
-                'label' => false,
-                'attr' => [
-                    'class' => 'd-none',
-                ],
-            ])
-            ->add('Save', SubmitType::class)
+
+            // ->add('Save', SubmitType::class)
 
             ->addEventListener(FormEvents::PRE_SUBMIT, function (PreSubmitEvent $event): void {
+                $formData = $event->getData(); // Récupère les données du formulaire
+                $form = $event->getForm();
+                // dd($form);
+                if (isset($formData['addUser']) && $formData['addUser'] == "1") {
 
+                    $form
+                        ->add('user', UserType::class, [
+                            'label' => false,
+                            'attr' => [],
+                        ]);
+                }
             });
-
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

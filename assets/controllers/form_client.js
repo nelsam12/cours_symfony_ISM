@@ -19,4 +19,5 @@ document.addEventListener('DOMContentLoaded', function () {
             userForm.classList.add('d-none');
         }
     }
+    
 })

@@ -114,8 +114,50 @@ class ClientController extends AbstractController
         ]);
     }
 
+    // #[Route('/clients/store', name: 'clients.store', methods: ['GET', 'POST'])]
+    // public function store(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    // {
+    //     $client = new Client();
+    //     $client->setUser(new User());
+    //     // Association de l'objet client au Formulaire
+    //     $form = $this->createForm(ClientType::class, $client);
+    //     // Récupération des données du formulaire
+    //     $form->handleRequest($request);
+    //     // Si le formulaire est soumis et valide
+    //     if ($form->isSubmitted()) {
+
+
+    //         $errorsClient = $validator->validate($client);
+    //         $errorsUser = [];
+    //         if (!$form->get('addUser')->getData()) {
+    //             // Ajout d'un utilisateur avec le client
+    //             $client->setUser(null);
+    //         } else {
+    //             $user = $client->getUser();
+    //             $errorsUser = $validator->validate($user);
+    //         }
+    //         if (count($errorsClient) > 0 || count($errorsUser) > 0) {
+    //             return $this->render('client/form.html.twig', [
+    //                 'formClient' => $form->createView(),
+    //                 'errorsClient' => $errorsClient,
+    //                 'errorsUser' => $errorsUser,
+    //             ]);
+    //         }
+
+    //         $entityManager->persist($client);
+    //         // Executer la requête
+    //         $entityManager->flush(); // commit the changes
+
+    //         // Redirection vers la liste des clients
+    //         return $this->redirectToRoute('clients.index');
+    //     }
+    //     return $this->render('client/form.html.twig', [
+    //         'formClient' => $form->createView(),
+    //     ]);
+    // }
+
     #[Route('/clients/store', name: 'clients.store', methods: ['GET', 'POST'])]
-    public function store(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    public function store(Request $request, EntityManagerInterface $entityManager): Response
     {
         $client = new Client();
         $client->setUser(new User());
@@ -124,26 +166,11 @@ class ClientController extends AbstractController
         // Récupération des données du formulaire
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
-        if ($form->isSubmitted()) {
-
-
-            $errorsClient = $validator->validate($client);
-            $errorsUser = [];
+        if ($form->isSubmitted() && $form->isValid()) {
             if (!$form->get('addUser')->getData()) {
                 // Ajout d'un utilisateur avec le client
                 $client->setUser(null);
-            } else {
-                $user = $client->getUser();
-                $errorsUser = $validator->validate($user);
             }
-            if (count($errorsClient) > 0 || count($errorsUser) > 0) {
-                return $this->render('client/form.html.twig', [
-                    'formClient' => $form->createView(),
-                    'errorsClient' => $errorsClient,
-                    'errorsUser' => $errorsUser,
-                ]);
-            }
-
             $entityManager->persist($client);
             // Executer la requête
             $entityManager->flush(); // commit the changes
@@ -151,7 +178,7 @@ class ClientController extends AbstractController
             // Redirection vers la liste des clients
             return $this->redirectToRoute('clients.index');
         }
-        return $this->render('client/form.html.twig', [
+        return $this->render('client/form2.html.twig', [
             'formClient' => $form->createView(),
         ]);
     }

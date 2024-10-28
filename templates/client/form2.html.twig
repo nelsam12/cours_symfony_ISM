@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+	.<div class="container">
+		<div class="card">
+
+			<div class="card-header">Enregistrement d'un client</div>
+			<div class="card-body">
+
+				{{ form_start(formClient, {'attr' : {
+					'class' : 'position-relative'
+				}}) }}
+
+				<button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 ">
+					save
+				</button>
+				{{ form_end(formClient) }}
+
+
+			</div>
+		</div>
+	</div>
+	{% block myScript %}
+		 <script src = "{{asset('controllers/form2_client.js')}}"></script>
+
+	{% endblock %}
+{% endblock %}

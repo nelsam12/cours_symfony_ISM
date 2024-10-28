@@ -7,6 +7,7 @@ use App\Entity\Client;
 use App\Form\UserType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use App\EventSubscriber\FormClientSubscriber;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -71,19 +72,21 @@ class ClientType extends AbstractType
 
             // ->add('Save', SubmitType::class)
 
-            ->addEventListener(FormEvents::PRE_SUBMIT, function (PreSubmitEvent $event): void {
-                $formData = $event->getData(); // Récupère les données du formulaire
-                $form = $event->getForm();
-                // dd($form);
-                if (isset($formData['addUser']) && $formData['addUser'] == "1") {
+            // ->addEventListener(FormEvents::PRE_SUBMIT, function (PreSubmitEvent $event): void {
+            //     $formData = $event->getData(); // Récupère les données du formulaire
+            //     $form = $event->getForm();
+            //     // dd($form);
+            //     if (isset($formData['addUser']) && $formData['addUser'] == "1") {
 
-                    $form
-                        ->add('user', UserType::class, [
-                            'label' => false,
-                            'attr' => [],
-                        ]);
-                }
-            });
+            //         $form
+            //             ->add('user', UserType::class, [
+            //                 'label' => false,
+            //                 'attr' => [],
+            //             ]);
+            //     }
+            // })
+
+            ->addEventSubscriber(new FormClientSubscriber);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

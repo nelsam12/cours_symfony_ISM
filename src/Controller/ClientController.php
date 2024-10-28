@@ -2,22 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Client;
 use App\Form\ClientType;
-use App\Dto\ClientSearchDto;
-use App\Entity\User;
 use App\enum\StatusDette;
+use App\Dto\ClientSearchDto;
 use App\Form\DetteFilterType;
 use App\Form\SearchClientType;
-use App\Repository\ClientRepository;
 use App\Repository\DetteRepository;
+use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ClientController extends AbstractController
 {
@@ -114,6 +115,7 @@ class ClientController extends AbstractController
         ]);
     }
 
+
     // #[Route('/clients/store', name: 'clients.store', methods: ['GET', 'POST'])]
     // public function store(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     // {
@@ -156,8 +158,9 @@ class ClientController extends AbstractController
     //     ]);
     // }
 
+    // CTRL C + CTRL V de ce qui est en haut
     #[Route('/clients/store', name: 'clients.store', methods: ['GET', 'POST'])]
-    public function store(Request $request, EntityManagerInterface $entityManager): Response
+    public function store(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $encoder): Response
     {
         $client = new Client();
         $client->setUser(new User());
@@ -170,7 +173,13 @@ class ClientController extends AbstractController
             if (!$form->get('addUser')->getData()) {
                 // Ajout d'un utilisateur avec le client
                 $client->setUser(null);
+                
+            }else{
+                $user = $client->getUser();
+                $hashedPassword = $encoder->hashPassword($user , $user->getPassword());
+                $user->setPassword($hashedPassword);
             }
+
             $entityManager->persist($client);
             // Executer la requête
             $entityManager->flush(); // commit the changes

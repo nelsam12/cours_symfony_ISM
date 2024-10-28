@@ -51,6 +51,7 @@ class ClientType extends AbstractType
             ->add('surname', TextType::class, [
                 'required' => false,
             ])
+            
             ->add('adresse', TextareaType::class, [
                 'required' => false,
                 'constraints' => [
@@ -59,6 +60,7 @@ class ClientType extends AbstractType
                     ]),
                 ]
             ])
+
             ->add('addUser', CheckboxType::class, [
                 'label' => 'Ajouter un compte ?',
                 'required' => false,

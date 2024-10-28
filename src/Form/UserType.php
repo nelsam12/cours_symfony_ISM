@@ -17,15 +17,18 @@ class UserType extends AbstractType
         $builder
             ->add('nom', TextType::class, [
                 'required' => false,
+                'data' => false,
                 'constraints' => [
                    
                 ]
             ])
             ->add('prenom', TextType::class, [
                 'required' => false,
+                'data' => false,
             ])
             ->add('login', TextType::class, [
                 'required' => false,
+                'data' => false,
             ])
             ->add('password', PasswordType::class, [
                 'required' => false,

@@ -9,6 +9,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class FormClientSubscriber implements EventSubscriberInterface
 {
+    // On pre-submit ce qui se passe lorsqu'on envoie le formulaire
+    //  c'est pour ça on a envoyé avec le js
+    // pour donner l'impression que c'est le JS qui charge le formulaire
+    // mais c'est le subscriber qui nous donne le formulaire
+    // maintenant, il va falloir refaire la même chose que ce qu'on avait fait dans le controller
+    // Effectivement, mais il le fait en Back
     public function onFormPreSubmit(PreSubmitEvent $event): void
     {
         $formData = $event->getData(); // Récupère les données du formulaire

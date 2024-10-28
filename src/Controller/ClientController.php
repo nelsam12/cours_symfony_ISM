@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Dto\ClientSearchDto;
+use App\Entity\User;
 use App\enum\StatusDette;
 use App\Form\DetteFilterType;
 use App\Form\SearchClientType;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ClientController extends AbstractController
 {
@@ -42,7 +44,7 @@ class ClientController extends AbstractController
         $limit = 6;
         if ($formSearch->isSubmitted($request) && $formSearch->isValid()) {
             // $formSearch->get('telephone')->getData()
-            
+
             $clients = $clientRepository->findClientBy($clientSearchDto, $page, $limit);
         } else {
             $clients = $clientRepository->paginateClients($page, $limit);
@@ -113,25 +115,35 @@ class ClientController extends AbstractController
     }
 
     #[Route('/clients/store', name: 'clients.store', methods: ['GET', 'POST'])]
-    public function store(Request $request, EntityManagerInterface $entityManager): Response
+    public function store(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
-
-
         $client = new Client();
+        $client->setUser(new User());
         // Association de l'objet client au Formulaire
         $form = $this->createForm(ClientType::class, $client);
         // Récupération des données du formulaire
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('addUser')->getData()){
+        if ($form->isSubmitted()) {
+
+
+            $errorsClient = $validator->validate($client);
+            $errorsUser = [];
+            if (!$form->get('addUser')->getData()) {
                 // Ajout d'un utilisateur avec le client
-                
+                $client->setUser(null);
+            } else {
+                $user = $client->getUser();
+                $errorsUser = $validator->validate($user);
             }
-            // Sauvegarde des données du formulaire dans la base de données
-            // il est déjà fait dans le constructeur
-            // $client->setCreateAt(new \DateTimeImmutable());
-            // $client->setUpdateAt(new \DateTimeImmutable());
+            if (count($errorsClient) > 0 || count($errorsUser) > 0) {
+                return $this->render('client/form.html.twig', [
+                    'formClient' => $form->createView(),
+                    'errorsClient' => $errorsClient,
+                    'errorsUser' => $errorsUser,
+                ]);
+            }
+
             $entityManager->persist($client);
             // Executer la requête
             $entityManager->flush(); // commit the changes

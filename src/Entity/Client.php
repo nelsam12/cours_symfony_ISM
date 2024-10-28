@@ -22,6 +22,9 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(
+        message: 'Veuillez renseigner un téléphone valide.',
+    )]
     #[ORM\Column(length: 11, unique: true)]
     private ?string $telephone = null;
 
@@ -31,6 +34,7 @@ class Client
         message: 'Veuillez renseigner un surname valide.',
     )]
     private ?string $surname = null;
+
 
     #[ORM\Column(length: 100)]
     private ?string $adresse = null;

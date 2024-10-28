@@ -4,7 +4,10 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Client;
+use App\Form\UserType;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -49,13 +52,18 @@ class ClientType extends AbstractType
             ])
             ->add('adresse', TextareaType::class, [
                 'required' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner une adresse valide.',
+                    ]),
+                ]
             ])
             ->add('addUser', CheckboxType::class, [
                 'label' => 'Ajouter un compte ?',
                 'required' => false,
                 'data' => false,
                 'mapped' => false,
-                
+
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
@@ -65,9 +73,12 @@ class ClientType extends AbstractType
                 'attr' => [
                     'class' => 'd-none',
                 ],
-                'validation_groups' => ['with_compte'],
             ])
             ->add('Save', SubmitType::class)
+
+            ->addEventListener(FormEvents::PRE_SUBMIT, function (PreSubmitEvent $event): void {
+
+            });
 
         ;
     }
@@ -76,6 +87,7 @@ class ClientType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Client::class,
+            'validation_groups' => ['Default'],
         ]);
     }
 }

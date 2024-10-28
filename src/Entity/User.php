@@ -16,29 +16,29 @@ class User implements PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[Assert\NotBlank(
-        message: 'Veuillez renseigner un surname valide.',
-        groups: ['with_compte']
+        message: 'Veuillez renseigner un nom valide.',
+
     )]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
     #[Assert\NotBlank(
-        message: 'Veuillez renseigner un surname valide.',
-        groups: ['with_compte']
+        message: 'Veuillez renseigner un prenom valide.',
+
     )]
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
     #[Assert\NotBlank(
-        message: 'Veuillez renseigner un surname valide.',
-        groups: ['with_compte']
+        message: 'Veuillez renseigner un login valide.',
+
     )]
     #[ORM\Column(length: 100, unique: true)]
     private ?string $login = null;
 
     #[Assert\NotBlank(
-        message: 'Veuillez renseigner un surname valide.',
-        groups: ['with_compte']
+        message: 'Veuillez renseigner un password valide.',
+
     )]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -56,12 +56,13 @@ class User implements PasswordAuthenticatedUserInterface
     private ?Client $client = null;
 
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->createAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
         $this->isBlocked = false;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

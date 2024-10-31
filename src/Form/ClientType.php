@@ -8,19 +8,25 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use App\EventSubscriber\FormClientSubscriber;
+use Symfonycasts\DynamicForms\DependentField;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfonycasts\DynamicForms\DynamicFormBuilder;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ClientType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $builder = new DynamicFormBuilder($builder);
+
         $builder
             ->add('telephone', TextType::class, [
                 'required' => false,
@@ -40,9 +46,7 @@ class ClientType extends AbstractType
                         '/^(77|78|76)([0-9]{7})$/',
                         'Le numéro de téléphone doit être au format 77XXXXXX ou 78XXXXXX ou 76XXXXXX'
                     )
-
                 ]
-
             ])
             ->add('surname', TextType::class, [
                 'required' => false,
@@ -68,23 +72,26 @@ class ClientType extends AbstractType
                 ],
             ])
 
-            // ->add('Save', SubmitType::class)
+            ->addDependent('user', 'addUser', function (DependentField $field, ?string $choice) {
+                if (empty($choice)) {
+                    return;
+                }
+                // if ($choice == "1") {
+              
+                $field
+                    ->add(UserType::class, [
+                        'label' => false,
+                        'attr' => [],
+                    ]);
+                // }
+            })
 
-            // ->addEventListener(FormEvents::PRE_SUBMIT, function (PreSubmitEvent $event): void {
-            //     $formData = $event->getData(); // Récupère les données du formulaire
-            //     $form = $event->getForm();
-            //     // dd($form);
-            //     if (isset($formData['addUser']) && $formData['addUser'] == "1") {
-
-            //         $form
-            //             ->add('user', UserType::class, [
-            //                 'label' => false,
-            //                 'attr' => [],
-            //             ]);
-            //     }
-            // })
-
-            ->addEventSubscriber(new FormClientSubscriber);
+            // ->add('save', SubmitType::class, [
+            //     'attr'=>[
+            //         'class' => 'btn btn-primary my-2 my-sm-0'
+            //     ]
+            // ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

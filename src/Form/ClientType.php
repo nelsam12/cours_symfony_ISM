@@ -2,22 +2,15 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Entity\Client;
-use App\Form\UserType;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use App\EventSubscriber\FormClientSubscriber;
-use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -95,7 +88,7 @@ class ClientType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Client::class,
-            'validation_groups' => ['Default'],
+            'validation_groups' => ['Default', 'WITH_COMPTE'],
         ]);
     }
 }

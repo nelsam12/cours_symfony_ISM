@@ -55,7 +55,11 @@ class Client
     private Collection $dettes;
     
 
+    
     #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
+    #[Assert\Type(type: User::class)]
+
+    #[Assert\Valid(groups: ["WITH_COMPTE"])]
     private ?User $user = null;
 
     public function __construct()

@@ -20,7 +20,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank(
         message: 'Veuillez renseigner un login valide.',
+        groups: ['WITH_COMPTE']
     )]
+
     #[ORM\Column(length: 180)]
     private ?string $login = null;
 
@@ -35,18 +37,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[Assert\NotBlank(
         message: 'Veuillez renseigner un password valide.',
+        groups: ['WITH_COMPTE']
     )]
     #[ORM\Column]
     private ?string $password = null;
 
     #[Assert\NotBlank(
         message: 'Veuillez renseigner un nom valide.',
+        groups: ['WITH_COMPTE']
     )]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
     #[Assert\NotBlank(
         message: 'Veuillez renseigner un prenom valide.',
+        groups: ['WITH_COMPTE']
     )]
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;

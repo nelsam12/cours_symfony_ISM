@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Client;
+use App\Form\UserType;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use App\EventSubscriber\FormClientSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -44,7 +47,7 @@ class ClientType extends AbstractType
             ->add('surname', TextType::class, [
                 'required' => false,
             ])
-            
+
             ->add('adresse', TextareaType::class, [
                 'required' => false,
                 'constraints' => [
@@ -88,7 +91,14 @@ class ClientType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Client::class,
-            'validation_groups' => ['Default', 'WITH_COMPTE'],
+            // APPLICATION CONDITIONNELLE DU GROUPE
+            'validation_groups' => function (FormInterface $form) {
+                if ($form->has("addUser") && $form->get("addUser")->getData()) {
+                    return ['Default', "WITH_COMPTE"];
+                }
+                return ['Default'];
+            }
+
         ]);
     }
 }

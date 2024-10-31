@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-// Validation du formulaire pour l'unicité 
+// Validation du formulaire pour l'unicité
 #[UniqueEntity('telephone', message:'Le téléphone doit être unique')]
 #[UniqueEntity('surname', message:'Le surname doit être unique')]
 
